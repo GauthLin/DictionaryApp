@@ -1,0 +1,2 @@
+# DictionaryApp
+Androïd application translation
