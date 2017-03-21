@@ -1,2 +1,8 @@
 # DictionaryApp
-Androïd application translation
+
+Collaborators:
+* Damien Vanhove
+* Gauthier Linard
+* Guillaume Verfaille
+* Lancelot Lhoest
+
