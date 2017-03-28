@@ -17,6 +17,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import be.ecam.dictionaryapp.Database.NewWordActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
