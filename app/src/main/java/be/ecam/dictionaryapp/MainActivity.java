@@ -1,14 +1,10 @@
 package be.ecam.dictionaryapp;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 
 import be.ecam.dictionaryapp.Database.DictionaryDBHelper;
-import be.ecam.dictionaryapp.Database.WordContract;
+import be.ecam.dictionaryapp.Entity.Word;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,5 +12,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DictionaryDBHelper dbHelper = new DictionaryDBHelper(this);
     }
 }
