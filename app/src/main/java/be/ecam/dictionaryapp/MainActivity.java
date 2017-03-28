@@ -1,9 +1,11 @@
 package be.ecam.dictionaryapp;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // JSONObject myTranslation = new JSONObject();
+        // myTranslation = translation.get("en", "fr", "welcome");
         new AsyncNetworkingTask().execute();
     }
 
@@ -45,13 +49,18 @@ public class MainActivity extends AppCompatActivity {
             return result;
         }
 
-        protected void onPostExecute(String queryResults) {
+        protected void onPostExecute(String result) {
+            String textToShow;
+            Context context = MainActivity.this;
 
-            if (queryResults != null) {
+            if (result != null && result.equals("{}")) {
+                textToShow = "Network Error" ;
 
             } else {
-
+                textToShow = result;
             }
+            Toast . makeText ( context , textToShow ,
+                    Toast. LENGTH_SHORT ) . show ( ) ;
         }
     }
 }
