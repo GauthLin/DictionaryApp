@@ -11,7 +11,7 @@
 2. `git add .` : permet d'ajouter tous les fichiers modifiés au futur *commit*. Si vous ne voulez ajouter qu'un seul fichier, il faut aller le préciser avec son nom (à la place du **.**). Par exemple `git add fichier.cpp`.
 3. `git commit` : permet de créer un nouveau commit avec les fichiers ajoutés précédemment. Il faut décrire ces modifications avec une petite phrase. Sauver en faisant **ctrl+x** suivi d'un **y** pour confirmer.
 4. `git push origin master` : permet d'uploader vos différents *commit* locaux sur le serveur.
-5. `git pull origin master` : permet de récupérer les fichiers qui se trouve sur le serveur (et sur la branche *master*). Si vous voulez rechercher les fichiers qui se trouve dans un autre *repository*, il faut préciser l'url. Par exemple: `git pull https://github.com/GauthLin/BeachBotEcam.git`.
+5. `git pull origin master` : permet de récupérer les fichiers qui se trouve sur le serveur (et sur la branche *master*). Si vous voulez rechercher les fichiers qui se trouve dans un autre *repository*, il faut préciser l'url. Par exemple: `git pull https://github.com/GauthLin/DictionaryApp.git`.
 
 
 Si vous voulez *merger* vos modifications chez moi, il faut créer une *pull request*. Pour ce faire:

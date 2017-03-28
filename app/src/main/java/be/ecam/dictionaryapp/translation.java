@@ -1,5 +1,7 @@
 package be.ecam.dictionaryapp;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,6 +29,7 @@ public final class translation{
         }
 
         result = Networking.getApiTranslation(translationRequest);
+
         return result;
     }
 

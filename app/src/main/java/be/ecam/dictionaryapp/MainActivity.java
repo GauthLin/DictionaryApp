@@ -1,10 +1,12 @@
 package be.ecam.dictionaryapp;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -17,19 +19,30 @@ public class MainActivity extends AppCompatActivity {
         new AsyncNetworkingTask().execute();
     }
 
-    public class AsyncNetworkingTask extends AsyncTask < String , Void , String > {
+    public class AsyncNetworkingTask extends AsyncTask< String , Void , String > {
+
         @Override
         protected String doInBackground(String... params) {
-            String json = null;
+
+            JSONObject myTranslation = new JSONObject();
+            String result;
 
             try {
-                json = Networking.getApiTranslation();
+                myTranslation = translation.get("en", "fr", "welcome");
             }
             catch (IOException error){
                 error.printStackTrace();
             }
+            catch (JSONException error){
+                error.printStackTrace();
+            }
 
-            return json;
+            result = myTranslation.toString();
+
+            String tag = "tag";
+            Log.v(tag, result);
+
+            return result;
         }
 
         protected void onPostExecute(String queryResults) {

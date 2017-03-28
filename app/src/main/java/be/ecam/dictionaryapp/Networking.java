@@ -29,7 +29,7 @@ public final class Networking {
 
         String urlAdress = "http://www.transltr.org/api/translate";
         URL url = new URL(urlAdress);
-        HttpURLConnection connection = null;
+        HttpURLConnection connection;
 
         connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
@@ -54,9 +54,6 @@ public final class Networking {
 
         translation = jsonString.toString();
         result = new JSONObject(translation);
-
-        String tag = "tag";
-        Log.v(tag, jsonString.toString());
 
         return result;
     }
