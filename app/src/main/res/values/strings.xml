@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">DictionaryApp</string>
     <string name="LangChoiceSummary">Anglais</string>
-    <string name="LangChoiceTitle">Langue</string>
+    <string name="LangChoiceTitle">Langue de traduction</string>
     <string name="LangChoiceCategory">Paramètres</string>
     <string name="settings">Paramètres</string>
     <string name="newWord">New Word</string>
