@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +43,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
         getMenuInflater().inflate(R.menu.menu, menu);
+
+        Button btn = (Button)findViewById(R.id.button);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AsyncNetworkingTask().execute();
+                startActivity(new Intent(MainActivity.this, NewWordActivity.class));
+            }
+        });
         return true;
     }
     @Override
@@ -53,16 +64,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             return true;
         }
 
-
-        Button btn = (Button)findViewById(R.id.button);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, NewWordActivity.class));
-            }
-        });
-        new AsyncNetworkingTask().execute();
         return super.onOptionsItemSelected(item);
     }
 
@@ -92,13 +93,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             return result;
         }
 
-        protected void onPostExecute(String queryResults) {
+        protected void onPostExecute(String result) {
+            String textToShow;
+            Context context = MainActivity.this;
 
-            if (queryResults != null) {
+            if (result != null && result.equals("{}")) {
+                textToShow = "Network Error" ;
 
             } else {
-
+                textToShow = result;
             }
+            Toast.makeText ( context , textToShow ,
+                    Toast.LENGTH_SHORT ) . show ( ) ;
         }
     }
 
