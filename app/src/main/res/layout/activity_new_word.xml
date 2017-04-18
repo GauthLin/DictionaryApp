@@ -31,4 +31,5 @@
         android:text="Add to dictionary"
         tools:layout_editor_absoluteY="78dp"
         tools:layout_editor_absoluteX="202dp" />
+
 </android.support.constraint.ConstraintLayout>
