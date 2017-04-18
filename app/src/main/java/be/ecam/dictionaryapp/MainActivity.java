@@ -1,7 +1,6 @@
 package be.ecam.dictionaryapp;
 
 import android.content.Context;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new AsyncNetworkingTask().execute();
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
@@ -64,34 +62,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             startActivity(new Intent(context, SettingsActivity.class));
             return true;
         }
-        Button btn = (Button)findViewById(R.id.button);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, NewWordActivity.class));
-            }
-        });
         return super.onOptionsItemSelected(item);
     }
 
-            return result;
-        }
 
-        protected void onPostExecute(String result) {
-            String textToShow;
-            Context context = MainActivity.this;
-
-            if (result != null && result.equals("{}")) {
-                textToShow = "Network Error" ;
-
-            } else {
-                textToShow = result;
-            }
-            Toast . makeText ( context , textToShow ,
-                    Toast. LENGTH_SHORT ) . show ( ) ;
-        }
-    }
 
 
 }
