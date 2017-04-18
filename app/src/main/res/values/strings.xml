@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">DictionaryApp</string>
-    <string name="newWord">New Word</string>
-    <string name="LangChoiceSummary">Summary</string>
+    <string name="LangChoiceSummary">Anglais</string>
     <string name="LangChoiceTitle">Langue</string>
     <string name="LangChoiceCategory">Paramètres</string>
+    <string name="settings">Paramètres</string>
+    <string name="newWord">New Word</string>
     <string name="title_activity_new_word">NewWordActivity</string>
 </resources>

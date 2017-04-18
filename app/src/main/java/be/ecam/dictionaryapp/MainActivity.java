@@ -1,16 +1,23 @@
 package be.ecam.dictionaryapp;
 
 import android.content.Context;
+<<<<<<< HEAD
 import android.content.ContentValues;
+=======
+>>>>>>> f0fbb05527c9fddcf75e5444ff7032da3e519ade
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
+<<<<<<< HEAD
 import android.widget.Toast;
+=======
+import android.view.Menu;
+import android.view.MenuItem;
+>>>>>>> f0fbb05527c9fddcf75e5444ff7032da3e519ade
 import android.view.View;
 import android.widget.Button;
 
@@ -18,13 +25,41 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import be.ecam.dictionaryapp.Database.NewWordActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key){
+        if (key.equals(true)){
+            ChangeLanguage();
+        }
+    }
+
+    private void ChangeLanguage() {
+    }
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu){
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item){
+        int itemThatWasClickedId = item.getItemId();
+        if(itemThatWasClickedId == R.id.goToPreference){
+            Context context = MainActivity.this;
+            startActivity(new Intent(context, SettingsActivity.class));
+            return true;
+        }
+
 
         Button btn = (Button)findViewById(R.id.button);
 
@@ -35,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         new AsyncNetworkingTask().execute();
+        return super.onOptionsItemSelected(item);
     }
 
     public class AsyncNetworkingTask extends AsyncTask< String , Void , String > {
