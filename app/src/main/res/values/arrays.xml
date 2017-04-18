@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="LangChoice">
-        <item name="1">Anglais</item>
-        <item name="7">Allemand</item>
-        <item name="3">Russe</item>
-        <item name="0">Espagnol</item>
+        <item name="English">Anglais</item>
+        <item name="German">Allemand</item>
+        <item name="Russian">Russe</item>
+        <item name="Spanish">Espagnol</item>
     </string-array>
 </resources>
