@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AsyncNetworkingTask().execute();
                 startActivity(new Intent(MainActivity.this, NewWordActivity.class));
             }
         });
@@ -67,46 +66,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         return super.onOptionsItemSelected(item);
     }
 
-    public class AsyncNetworkingTask extends AsyncTask< String , Void , String > {
 
-        @Override
-        protected String doInBackground(String... params) {
-
-            JSONObject myTranslation = new JSONObject();
-            String result;
-
-            try {
-                myTranslation = translation.get("en", "fr", "welcome");
-            }
-            catch (IOException error){
-                error.printStackTrace();
-            }
-            catch (JSONException error){
-                error.printStackTrace();
-            }
-
-            result = myTranslation.toString();
-
-            String tag = "tag";
-            Log.v(tag, result);
-
-            return result;
-        }
-
-        protected void onPostExecute(String result) {
-            String textToShow;
-            Context context = MainActivity.this;
-
-            if (result != null && result.equals("{}")) {
-                textToShow = "Network Error" ;
-
-            } else {
-                textToShow = result;
-            }
-            Toast.makeText ( context , textToShow ,
-                    Toast.LENGTH_SHORT ) . show ( ) ;
-        }
-    }
 
 
 }
