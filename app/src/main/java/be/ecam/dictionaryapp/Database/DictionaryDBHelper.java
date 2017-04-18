@@ -110,25 +110,32 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                WordContract.WordEntry._ID,
-                WordContract.WordEntry.COLUMN_NAME_NAME
-        };
+        final String query = String.format("SELECT * FROM %s",
+                WordContract.WordEntry.TABLE_NAME);
+        Cursor wCursor = db.rawQuery(query, null);
 
-        // TODO inner join with translate
-        Cursor cursor = db.query(
-                WordContract.WordEntry.TABLE_NAME,                     // The table to query
-                projection,                               // The columns to return
-                null,                                // The columns for the WHERE clause
-                null,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                null                                 // The sort order
-        );
+        while (wCursor.moveToNext()) {
+            String word_name = wCursor.getString(wCursor.getColumnIndex(WordContract.WordEntry.COLUMN_NAME_NAME));
+            int word_id = wCursor.getInt(wCursor.getColumnIndex(WordContract.WordEntry._ID));
 
-        cursor.close();
+            Word word = new Word(word_id, word_name);
+
+            String trans_query = String.format("SELECT * FROM %s t WHERE t.%s=?", TranslationContract.TranslationEntry.TABLE_NAME, TranslationContract.TranslationEntry.COLUMN_NAME_WORD_ID);
+            Cursor tCursor = db.rawQuery(trans_query, new String[] { String.valueOf(word_id) });
+
+            while(tCursor.moveToNext()) {
+                int trans_id = tCursor.getInt(tCursor.getColumnIndex(TranslationContract.TranslationEntry._ID));
+                String trans = tCursor.getString(tCursor.getColumnIndex(TranslationContract.TranslationEntry.COLUMN_NAME_TRANSLATION));
+                String trans_lang = tCursor.getString(tCursor.getColumnIndex(TranslationContract.TranslationEntry.COLUMN_NAME_LANGUAGE));
+                Translation translation = new Translation(trans_id, trans, trans_lang);
+                word.addTranslation(translation);
+            }
+            tCursor.close();
+
+            words.add(word);
+        }
+
+        wCursor.close();
 
         return words;
     }
