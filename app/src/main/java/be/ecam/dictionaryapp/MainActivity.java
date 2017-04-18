@@ -1,10 +1,7 @@
 package be.ecam.dictionaryapp;
 
 import android.content.Context;
-<<<<<<< HEAD
 import android.content.ContentValues;
-=======
->>>>>>> f0fbb05527c9fddcf75e5444ff7032da3e519ade
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -12,12 +9,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
-<<<<<<< HEAD
 import android.widget.Toast;
-=======
 import android.view.Menu;
 import android.view.MenuItem;
->>>>>>> f0fbb05527c9fddcf75e5444ff7032da3e519ade
 import android.view.View;
 import android.widget.Button;
 
@@ -33,7 +27,7 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        new AsyncNetworkingTask().execute();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
@@ -69,7 +63,6 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
                 startActivity(new Intent(MainActivity.this, NewWordActivity.class));
             }
         });
-        new AsyncNetworkingTask().execute();
         return super.onOptionsItemSelected(item);
     }
 
