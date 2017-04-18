@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Définit un mot à traduire
+ * Defines a word to translate
  */
 public class Word {
     private int id;
-    private String name;
-    private List<Translation> translations;
+    private String name; // word to translation
+    private List<Translation> translations; // list of translations of that word
 
     public Word(String name) {
         this(0, name);

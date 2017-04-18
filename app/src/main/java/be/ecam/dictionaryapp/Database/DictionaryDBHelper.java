@@ -52,6 +52,12 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Saves to the database the word
+     *
+     * @param word the word to save
+     * @return the word with its id
+     */
     public Word save(Word word) {
         // Si le mot à traduire n'existe pas encore
         if (word.getId() == 0) {
@@ -89,6 +95,11 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Deletes a specific word
+     *
+     * @param word the word to delete
+     */
     public void delete(Word word) {
         for (Translation translation :
                 word.getTranslations()) {
@@ -105,13 +116,17 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
         db.delete(WordContract.WordEntry.TABLE_NAME, selection, selectionArgs);
     }
 
+    /**
+     * Gets the list of the words
+     *
+     * @return list of words
+     */
     public List<Word> getWords() {
         List<Word> words = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        final String query = String.format("SELECT * FROM %s",
-                WordContract.WordEntry.TABLE_NAME);
+        final String query = String.format("SELECT * FROM %s", WordContract.WordEntry.TABLE_NAME);
         Cursor wCursor = db.rawQuery(query, null);
 
         while (wCursor.moveToNext()) {
@@ -119,18 +134,7 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
             int word_id = wCursor.getInt(wCursor.getColumnIndex(WordContract.WordEntry._ID));
 
             Word word = new Word(word_id, word_name);
-
-            String trans_query = String.format("SELECT * FROM %s t WHERE t.%s=?", TranslationContract.TranslationEntry.TABLE_NAME, TranslationContract.TranslationEntry.COLUMN_NAME_WORD_ID);
-            Cursor tCursor = db.rawQuery(trans_query, new String[] { String.valueOf(word_id) });
-
-            while(tCursor.moveToNext()) {
-                int trans_id = tCursor.getInt(tCursor.getColumnIndex(TranslationContract.TranslationEntry._ID));
-                String trans = tCursor.getString(tCursor.getColumnIndex(TranslationContract.TranslationEntry.COLUMN_NAME_TRANSLATION));
-                String trans_lang = tCursor.getString(tCursor.getColumnIndex(TranslationContract.TranslationEntry.COLUMN_NAME_LANGUAGE));
-                Translation translation = new Translation(trans_id, trans, trans_lang);
-                word.addTranslation(translation);
-            }
-            tCursor.close();
+            word = getTranslationsOf(word);
 
             words.add(word);
         }
@@ -140,6 +144,63 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
         return words;
     }
 
+    /**
+     * Gets a specific word
+     *
+     * @param name the name of the word to search
+     * @return the word with its translations
+     */
+    public Word getWord(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s w WHERE LOWER(w.%s) LIKE '%%%s%%'",
+                WordContract.WordEntry.TABLE_NAME,
+                WordContract.WordEntry.COLUMN_NAME_NAME, name.toLowerCase());
+
+        Word word = null;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            String word_name = cursor.getString(cursor.getColumnIndex(WordContract.WordEntry.COLUMN_NAME_NAME));
+            int word_id = cursor.getInt(cursor.getColumnIndex(WordContract.WordEntry._ID));
+
+            word = new Word(word_id, word_name);
+            word = getTranslationsOf(word);
+        }
+
+        cursor.close();
+
+        return word;
+    }
+
+    /**
+     * Gets the all the translations of the word
+     *
+     * @param word the word to get the translations
+     * @return the word with all its translations
+     */
+    private Word getTranslationsOf(Word word) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String trans_query = String.format("SELECT * FROM %s t WHERE t.%s=?", TranslationContract.TranslationEntry.TABLE_NAME, TranslationContract.TranslationEntry.COLUMN_NAME_WORD_ID);
+        Cursor tCursor = db.rawQuery(trans_query, new String[] { String.valueOf(word.getId()) });
+        while(tCursor.moveToNext()) {
+            int trans_id = tCursor.getInt(tCursor.getColumnIndex(TranslationContract.TranslationEntry._ID));
+            String trans = tCursor.getString(tCursor.getColumnIndex(TranslationContract.TranslationEntry.COLUMN_NAME_TRANSLATION));
+            String trans_lang = tCursor.getString(tCursor.getColumnIndex(TranslationContract.TranslationEntry.COLUMN_NAME_LANGUAGE));
+            Translation translation = new Translation(trans_id, trans, trans_lang);
+            word.addTranslation(translation);
+        }
+        tCursor.close();
+
+        return word;
+    }
+
+    /**
+     * Saves to the database the translation
+     *
+     * @param translation the translation to save
+     * @param word_id the word related to the translation
+     * @return the translation with its id
+     */
     public Translation save(Translation translation, int word_id) {
         if (translation.getId() == 0)
         {
@@ -181,6 +242,11 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Deletes the specific translation
+     *
+     * @param translation the translation to delete
+     */
     public void delete(Translation translation) {
         // Gets the data repository in write mode
         SQLiteDatabase db = this.getWritableDatabase();
