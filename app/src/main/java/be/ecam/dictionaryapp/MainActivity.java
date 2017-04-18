@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     public boolean onCreateOptionsMenu (Menu menu){
         getMenuInflater().inflate(R.menu.menu, menu);
 
+        /**
+         * création du bouton pour accéder à la page add new word
+         */
         Button btn = (Button)findViewById(R.id.button);
 
         btn.setOnClickListener(new View.OnClickListener() {

@@ -17,6 +17,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import be.ecam.dictionaryapp.Entity.Translation;
+import be.ecam.dictionaryapp.Entity.Word;
 import be.ecam.dictionaryapp.MainActivity;
 import be.ecam.dictionaryapp.R;
 import be.ecam.dictionaryapp.translation;
@@ -27,23 +29,40 @@ public class NewWordActivity extends AppCompatActivity {
     private TextView showTranslation;
     public String str;
     private JSONObject myTranslation;
+    private DictionaryDBHelper dbManager;
+    private String textToShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_word);
 
-
+        /**
+         * Instanciation de l'input et des 2 boutons de la page add new word.
+         * Si on clique sur le btn2, récupère la traduction depuis serveur.
+         * Si on clique sur le btn3, stock la traduction dans la DB.
+         */
         inputTxt = (EditText) findViewById(R.id.editText);
         showTranslation = (TextView) findViewById((R.id.textView));
 
-       Button btn = (Button)findViewById(R.id.button2);
+       Button btn2 = (Button)findViewById(R.id.button2);
+        Button btn3 = (Button)findViewById(R.id.button3);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 str = inputTxt.getText().toString();
                 new AsyncNetworkingTask().execute();
+            }
+        });
+
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                str = inputTxt.getText().toString();
+                Word word = new Word(str);
+                word.addTranslation(new Translation(textToShow, "en"));
+                dbManager.save(word);
             }
         });
     }
@@ -75,7 +94,7 @@ public class NewWordActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(JSONObject myTranslation) {
-            String textToShow;
+
             Context context = NewWordActivity.this;
 
             if (myTranslation != null && myTranslation.equals("{}")) {
