@@ -14,16 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-
 import be.ecam.dictionaryapp.Database.NewWordActivity;
 
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class MainActivity extends AppCompatActivity  implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +43,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
         getMenuInflater().inflate(R.menu.menu, menu);
-
-        Button btn = (Button)findViewById(R.id.button);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, NewWordActivity.class));
-            }
-        });
         return true;
     }
     @Override
@@ -64,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             startActivity(new Intent(context, SettingsActivity.class));
             return true;
         }
+
+
         Button btn = (Button)findViewById(R.id.button);
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +65,29 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         });
         return super.onOptionsItemSelected(item);
     }
+
+    public class AsyncNetworkingTask extends AsyncTask< String , Void , String > {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            JSONObject myTranslation = new JSONObject();
+            String result;
+
+            try {
+                myTranslation = translation.get("en", "fr", "welcome");
+            }
+            catch (IOException error){
+                error.printStackTrace();
+            }
+            catch (JSONException error){
+                error.printStackTrace();
+            }
+
+            result = myTranslation.toString();
+
+            String tag = "tag";
+            Log.v(tag, result);
 
             return result;
         }

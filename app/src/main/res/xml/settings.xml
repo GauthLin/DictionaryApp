@@ -4,8 +4,9 @@
     <PreferenceCategory android:title="@string/LangChoiceCategory">
         <ListPreference
             android:entries="@array/LangChoice"
+            android:entryValues="@array/LangChoice"
+            android:defaultValue="@string/LangChoiceSummary"
             android:key="LangChoice"
-            android:summary="@string/LangChoiceSummary"
             android:title="@string/LangChoiceTitle" />
     </PreferenceCategory>
 </PreferenceScreen>

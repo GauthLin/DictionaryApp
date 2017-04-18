@@ -1,6 +1,9 @@
 package be.ecam.dictionaryapp.Entity;
 
 
+/**
+ * Defines the translation class
+ */
 public class Translation {
     private int id;
     private String translation;
