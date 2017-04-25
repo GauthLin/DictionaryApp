@@ -2,6 +2,7 @@ package be.ecam.dictionaryapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import be.ecam.dictionaryapp.Entity.Translation;
 import be.ecam.dictionaryapp.Entity.Word;
 import be.ecam.dictionaryapp.MainActivity;
 import be.ecam.dictionaryapp.R;
@@ -24,22 +26,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterVie
 
     private Cursor cursor;
     private List<Word> vocabList = MainActivity.getVocabulary();
-    private Object myTranslationObject;
-
-    public ItemAdapter(){
-
-    }
+    private Word myTranslationObject;
 
     private ItemAdapterOnClickHandler clickHandler;
 
     //constructeur de ItemAdapter
-    public ItemAdapter(ItemAdapterOnClickHandler clickHandler) {
-        this.clickHandler = clickHandler;
-    }
+    public ItemAdapter(ItemAdapterOnClickHandler clickHandler) { this.clickHandler = clickHandler; }
 
-    public interface ItemAdapterOnClickHandler {
-        void onClick(int index);
-    }
+    public interface ItemAdapterOnClickHandler { void onClick(int index); }
 
     public class ItemAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         // on va creer une viewHolder, un bloc contenant une vue.
@@ -63,39 +57,38 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterVie
         @Override
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
+            myTranslationObject = vocabList.get(adapterPosition);
+
             clickHandler.onClick(adapterPosition);
         }
     }
 
     @Override
     public ItemAdapterViewHolder onCreateViewHolder (ViewGroup viewGroup, int viewType){
-        // nouvelle méthode de itemAdapter, celle qui va CREER les viewHolders.
+            // nouvelle méthode de itemAdapter, celle qui va CREER les viewHolders.
 
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.traduction_layout; // il a besoin de creer une des vues sur base du xml prédiction
-        // d'abord il récupère le layout ^
-        // ensuite il va récupérer un inflater, pour pouvoir ensuite 'peupler' ou 'gonfler' le layout
         LayoutInflater inflater = LayoutInflater.from(context);
-        // on définit une propriété utilisée par l'inflator
         boolean shouldAttachToPArentImmediately = false;
-
-        // view de type View est le résultat du 'gonflage', on gonfle le layout avec l'ID définit précédemment.
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToPArentImmediately);
         return new ItemAdapterViewHolder(view);
-        // on a un layout
-        // on en a fait un objet view avec un inflater
-        // avec cet objet vue, on creer un viewHolder en appelant ItemAdapterViewHOlder(on lui passe view)
+
     }
 
     @Override
     public void onBindViewHolder(ItemAdapterViewHolder itemAdapterViewHolder, int position){
 
-        myTranslationObject = vocabList.get(position);
+        //if(!cursor.moveToPosition(position)) return;
 
-        String textOrigin = "coucou";
-                // cursor.getString(cursor.getColumnIndex(WeatherEntry.WEATHER_DATE));
-        String textTrad = "hello";
-                // cursor.getString(cursor.getColumnIndex(WeatherEntry.WEATHER_DEG_MIN));
+        myTranslationObject = vocabList.get(position);
+        String textOrigin = myTranslationObject.getName();
+        String textTrad = "";
+
+        for (Translation translation :
+                myTranslationObject.getTranslations()) {
+                textTrad += translation.getTranslation();
+        }
 
         itemAdapterViewHolder.trans_origin_TextView.setText(textOrigin);
         itemAdapterViewHolder.trans_translation_TextView.setText(textTrad);

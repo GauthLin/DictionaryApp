@@ -29,7 +29,9 @@ import be.ecam.dictionaryapp.Database.DictionaryDBHelper;
 import be.ecam.dictionaryapp.Database.NewWordActivity;
 import be.ecam.dictionaryapp.Entity.Word;
 
-public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class MainActivity extends AppCompatActivity
+        implements  SharedPreferences.OnSharedPreferenceChangeListener,
+                    ItemAdapter.ItemAdapterOnClickHandler{
 
     private DictionaryDBHelper DB;
     private RecyclerView translationsView;
@@ -40,9 +42,12 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //DB
+        DB = new DictionaryDBHelper(this);
+        vocabulary = DB.getWords();
 
         //Recyclerview
-        itemAdapter = new ItemAdapter();
+        itemAdapter = new ItemAdapter(this);
         translationsView = (RecyclerView) findViewById(R.id.translationsRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
         translationsView.setLayoutManager(layoutManager);
@@ -52,9 +57,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         //Preferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-
-        DB = new DictionaryDBHelper(this);
-        vocabulary = DB.getWords();
     }
     public static List<Word> getVocabulary(){
         return vocabulary;
@@ -97,6 +99,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void onClick(int index) {
+        Context context = this;
+        Class destinationClass = TranslationActivity.class;
+        Intent translationIntent = new Intent(context, destinationClass);
+        translationIntent.putExtra(Intent.EXTRA_INDEX, index);
+        // on prend l'index, on le met dans l'intent.
+        startActivity(translationIntent);
+    }
+
 
 
 
