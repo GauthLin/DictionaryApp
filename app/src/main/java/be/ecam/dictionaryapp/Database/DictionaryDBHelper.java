@@ -70,8 +70,14 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
 
             // Insert the new row, returning the primary key value of the new row
             long newRowId = db.insert(WordContract.WordEntry.TABLE_NAME, null, values);
+            Word new_word = new Word((int)newRowId, word.getName());
 
-            return new Word((int)newRowId, word.getName());
+            for (Translation translation :
+                    word.getTranslations()) {
+                new_word.addTranslation(save(translation, (int)newRowId));
+            }
+
+            return new_word;
         }
         // Si le mot à traduire existe déjà
         else {

@@ -1,7 +1,6 @@
 package be.ecam.dictionaryapp.Database;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +17,6 @@ import java.io.IOException;
 
 import be.ecam.dictionaryapp.Entity.Translation;
 import be.ecam.dictionaryapp.Entity.Word;
-import be.ecam.dictionaryapp.MainActivity;
 import be.ecam.dictionaryapp.R;
 import be.ecam.dictionaryapp.translation;
 
@@ -35,9 +32,11 @@ public class NewWordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dbManager = new DictionaryDBHelper(this);
+        dbManager.getWords();
         setContentView(R.layout.activity_new_word);
 
-        /**
+        /*
          * Instanciation de l'input et des 2 boutons de la page add new word.
          * Si on clique sur le btn2, récupère la traduction depuis serveur.
          * Si on clique sur le btn3, stock la traduction dans la DB.
@@ -45,7 +44,7 @@ public class NewWordActivity extends AppCompatActivity {
         inputTxt = (EditText) findViewById(R.id.editText);
         showTranslation = (TextView) findViewById((R.id.textView));
 
-       Button btn2 = (Button)findViewById(R.id.button2);
+        Button btn2 = (Button)findViewById(R.id.button2);
         Button btn3 = (Button)findViewById(R.id.button3);
 
         btn2.setOnClickListener(new View.OnClickListener() {
@@ -60,9 +59,18 @@ public class NewWordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 str = inputTxt.getText().toString();
-                Word word = new Word(str);
-                word.addTranslation(new Translation(textToShow, "en"));
+                Word word = dbManager.getWord(str);
+                if (word == null){
+                    word = new Word(str);
+                }
+
+                Translation translation = new Translation(textToShow, "en");
+                if (!word.getTranslations().contains(translation)) {
+                    word.addTranslation(translation);
+                }
+
                 dbManager.save(word);
+                dbManager.getWords();
             }
         });
     }

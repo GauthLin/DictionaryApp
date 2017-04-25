@@ -38,4 +38,14 @@ public class Translation {
     public void setLanguage(String language) {
         this.language = language;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if (o instanceof Translation){
+            Translation translation = (Translation)o;
+            if (this.getTranslation().toLowerCase() == translation.getTranslation().toLowerCase())
+                return true;
+        }
+        return false;
+    }
 }
