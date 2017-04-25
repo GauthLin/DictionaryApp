@@ -11,6 +11,7 @@
     <string name="translate">Traduire</string>
     <string name="plz_connect_to_internet">Veuillez vous connecter à internet !</string>
     <string name="plz_add_word">Veuillez indiquer un mot à traduire !</string>
+    <string name="word_saved">Ce mot a bien été enregistré !</string>
     <string name="word_already_saved">Ce mot est déjà enregistré !</string>
     <string name="word_to_save_cannot_be_empty">Le mot à enregistrer ne peut pas être vide !</string>
     <string name="error">Il y a eu une erreur. Veuillez réessayer plus tard.</string>

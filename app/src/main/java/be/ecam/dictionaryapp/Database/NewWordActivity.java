@@ -83,6 +83,8 @@ public class NewWordActivity extends AppCompatActivity {
                     Translation translation = new Translation(textToShow, "en");
                     if (!word.getTranslations().contains(translation)) {
                         word.addTranslation(translation);
+                        Toast.makeText(NewWordActivity.this, R.string.word_saved, Toast.LENGTH_LONG).show();
+                    } else {
                         Toast.makeText(NewWordActivity.this, R.string.word_already_saved, Toast.LENGTH_LONG).show();
                     }
 
