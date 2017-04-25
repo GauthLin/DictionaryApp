@@ -1,9 +1,17 @@
 <resources>
-    <string name="app_name">DictionaryApp</string>
+    <string name="app_name">Dictionnaire de langues</string>
     <string name="LangChoiceSummary">Anglais</string>
     <string name="LangChoiceTitle">Langue de traduction</string>
     <string name="LangChoiceCategory">Paramètres</string>
     <string name="settings">Paramètres</string>
-    <string name="newWord">New Word</string>
-    <string name="title_activity_new_word">NewWordActivity</string>
+    <string name="newWord">Nouveau mot</string>
+    <string name="title_activity_new_word">Traduction d\'un mot</string>
+    <string name="word_to_translate">Mot à traduire</string>
+    <string name="add_to_dictionary">Ajouter au dictionnaire</string>
+    <string name="translate">Traduire</string>
+    <string name="plz_connect_to_internet">Veuillez vous connecter à internet !</string>
+    <string name="plz_add_word">Veuillez indiquer un mot à traduire !</string>
+    <string name="word_already_saved">Ce mot est déjà enregistré !</string>
+    <string name="word_to_save_cannot_be_empty">Le mot à enregistrer ne peut pas être vide !</string>
+    <string name="error">Il y a eu une erreur. Veuillez réessayer plus tard.</string>
 </resources>

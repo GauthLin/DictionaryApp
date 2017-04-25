@@ -3,6 +3,7 @@
     package="be.ecam.dictionaryapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,13 +25,11 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".MainActivity"/>
         </activity>
-        <activity
-            android:name=".NewWordActivity"
-            android:label="@string/title_activity_new_word"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
 
-        <activity android:name=".Database.NewWordActivity"></activity>
+        <activity
+            android:name=".Database.NewWordActivity"
+            android:label="@string/title_activity_new_word"
+            android:parentActivityName=".MainActivity"/>
 
     </application>
 </manifest>
