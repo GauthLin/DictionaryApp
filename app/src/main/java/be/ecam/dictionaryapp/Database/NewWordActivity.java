@@ -1,14 +1,18 @@
 package be.ecam.dictionaryapp.Database;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,19 +25,24 @@ import be.ecam.dictionaryapp.R;
 import be.ecam.dictionaryapp.translation;
 
 public class NewWordActivity extends AppCompatActivity {
-
     private EditText inputTxt;
     private TextView showTranslation;
     public String str;
     private JSONObject myTranslation;
     private DictionaryDBHelper dbManager;
     private String textToShow;
+    private boolean textCanBeSaved;
+
+    public boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbManager = new DictionaryDBHelper(this);
-        dbManager.getWords();
         setContentView(R.layout.activity_new_word);
 
         /*
@@ -51,7 +60,13 @@ public class NewWordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 str = inputTxt.getText().toString();
-                new AsyncNetworkingTask().execute();
+                if (!isConnected()) {
+                    Toast.makeText(NewWordActivity.this, R.string.plz_connect_to_internet, Toast.LENGTH_LONG).show();
+                } else if (!str.equals("")) {
+                    new AsyncNetworkingTask().execute();
+                } else {
+                    Toast.makeText(NewWordActivity.this, R.string.plz_add_word, Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -59,68 +74,61 @@ public class NewWordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 str = inputTxt.getText().toString();
-                Word word = dbManager.getWord(str);
-                if (word == null){
-                    word = new Word(str);
-                }
+                if (textCanBeSaved) {
+                    Word word = dbManager.getWord(str);
+                    if (word == null){
+                        word = new Word(str);
+                    }
 
-                Translation translation = new Translation(textToShow, "en");
-                if (!word.getTranslations().contains(translation)) {
-                    word.addTranslation(translation);
-                }
+                    Translation translation = new Translation(textToShow, "en");
+                    if (!word.getTranslations().contains(translation)) {
+                        word.addTranslation(translation);
+                        Toast.makeText(NewWordActivity.this, R.string.word_saved, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(NewWordActivity.this, R.string.word_already_saved, Toast.LENGTH_LONG).show();
+                    }
 
-                dbManager.save(word);
-                dbManager.getWords();
+                    dbManager.save(word);
+                } else {
+                    Toast.makeText(NewWordActivity.this, R.string.word_to_save_cannot_be_empty, Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
 
     public class AsyncNetworkingTask extends AsyncTask< JSONObject , Void , JSONObject > {
-
         @Override
         protected JSONObject doInBackground(JSONObject... params) {
-
             myTranslation = new JSONObject();
-            String result;
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NewWordActivity.this);
+            String lang = prefs.getString("LangChoice", "en");
 
             try {
-                myTranslation = translation.get("en", "fr", str);
+                myTranslation = translation.get("fr", lang, str);
             }
-            catch (IOException error){
-                error.printStackTrace();
+            catch (IOException | JSONException error){
+                Toast.makeText(NewWordActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
             }
-            catch (JSONException error){
-                error.printStackTrace();
-            }
-
-            //result = myTranslation.toString();
-
-            String tag = "tag";
-            //Log.v(tag, result);
 
             return myTranslation;
         }
 
         protected void onPostExecute(JSONObject myTranslation) {
-
             Context context = NewWordActivity.this;
+            textCanBeSaved = false;
 
             if (myTranslation != null && myTranslation.equals("{}")) {
-                textToShow = "Network Error" ;
-
+                Toast.makeText(context, R.string.plz_connect_to_internet, Toast.LENGTH_LONG).show();
             } else {
                 try {
                     textToShow = myTranslation.getString("translationText");
+                    textCanBeSaved = true;
+                    showTranslation.setText(textToShow);
                 }
                 catch (JSONException error){
-                    error.printStackTrace();
-                    textToShow = "Il y a eu une erreur";
+                    Toast.makeText(context, R.string.error, Toast.LENGTH_LONG).show();
                 }
-
             }
-            showTranslation.setText(textToShow);
-            /*Toast.makeText (context, textToShow,
-                    Toast.LENGTH_SHORT ).show() ;*/
         }
     }
 }
