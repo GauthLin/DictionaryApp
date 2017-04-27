@@ -59,7 +59,9 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
      * @return the word with its id
      */
     public Word save(Word word) {
-        // Si le mot à traduire n'existe pas encore
+        Word new_word;
+
+        // if the word doesn't already exit in db
         if (word.getId() == 0) {
             // Gets the data repository in write mode
             SQLiteDatabase db = this.getWritableDatabase();
@@ -70,16 +72,9 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
 
             // Insert the new row, returning the primary key value of the new row
             long newRowId = db.insert(WordContract.WordEntry.TABLE_NAME, null, values);
-            Word new_word = new Word((int) newRowId, word.getName());
-
-            for (Translation translation :
-                    word.getTranslations()) {
-                new_word.addTranslation(save(translation, (int) newRowId));
-            }
-
-            return new_word;
+            new_word = new Word((int) newRowId, word.getName());
         }
-        // Si le mot à traduire existe déjà
+        // If the word already exits in db
         else {
             SQLiteDatabase db = this.getReadableDatabase();
 
@@ -91,14 +86,18 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
             String selection = WordContract.WordEntry._ID + " = ?";
             String[] selectionArgs = {Integer.toString(word.getId())};
 
-            int count = db.update(
-                    WordContract.WordEntry.TABLE_NAME,
-                    values,
-                    selection,
-                    selectionArgs);
+            db.update(WordContract.WordEntry.TABLE_NAME, values, selection, selectionArgs);
 
-            return word;
+            new_word = new Word(word.getId(), word.getName());
         }
+
+        // Update the translations bound to that word
+        for (Translation translation :
+                word.getTranslations()) {
+            new_word.addTranslation(save(translation, new_word.getId()));
+        }
+
+        return new_word;
     }
 
     /**
@@ -158,12 +157,12 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
      */
     public Word getWord(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = String.format("SELECT * FROM %s w WHERE LOWER(w.%s) LIKE '%%%s%%'",
+        String query = String.format("SELECT * FROM %s w WHERE LOWER(w.%s) = ?",
                 WordContract.WordEntry.TABLE_NAME,
-                WordContract.WordEntry.COLUMN_NAME_NAME, name.toLowerCase());
+                WordContract.WordEntry.COLUMN_NAME_NAME);
 
         Word word = null;
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[] {name.toLowerCase()});
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             String word_name = cursor.getString(cursor.getColumnIndex(WordContract.WordEntry.COLUMN_NAME_NAME));

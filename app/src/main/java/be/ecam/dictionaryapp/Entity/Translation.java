@@ -1,6 +1,11 @@
 package be.ecam.dictionaryapp.Entity;
 
 
+import android.annotation.TargetApi;
+import android.os.Build;
+
+import java.util.Objects;
+
 /**
  * Defines the translation class
  */
@@ -39,11 +44,13 @@ public class Translation {
         this.language = language;
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public boolean equals(Object o) {
         if (o instanceof Translation) {
             Translation translation = (Translation) o;
-            if (this.getTranslation().toLowerCase() == translation.getTranslation().toLowerCase())
+            if (Objects.equals(this.getTranslation().toLowerCase(), translation.getTranslation().toLowerCase())
+                    && Objects.equals(this.getLanguage(), ((Translation) o).getLanguage()))
                 return true;
         }
         return false;
