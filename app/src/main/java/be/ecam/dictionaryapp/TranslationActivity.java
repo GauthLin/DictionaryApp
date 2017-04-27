@@ -31,29 +31,23 @@ public class TranslationActivity extends AppCompatActivity {
 
         TextView WordTextView = (TextView) findViewById(R.id.Word);
         TextView EnLangTextView = (TextView) findViewById(R.id.TransEng);
-        TextView EnTradTextView = (TextView) findViewById(R.id.TransEs);
 
         Intent intent = getIntent();
 
         int position = intent.getIntExtra(Intent.EXTRA_INDEX, 0);
         myTranslationObject = vocabList.get(position);
 
-        String trad1 = "";
-        String trad2 = "";
-
+        String trans = "";
 
         for (Translation translation :
                 myTranslationObject.getTranslations()) {
-
-            String lang = translation.getLanguage();
-            String trad = translation.getTranslation();
-            EnLangTextView.setText(lang);
-            EnTradTextView.setText(trad);
+            trans += String.format("%s - %s\n", translation.getLanguage(), translation.getTranslation());
         }
+        EnLangTextView.setText(trans);
 
         // on passe le Int au find de Weather, qui va nous renvoyer le bon weather.
 
-        WordTextView.setText(myTranslationObject.getName());
+        WordTextView.setText("Traduction du mot " + myTranslationObject.getName());
 
 
     }

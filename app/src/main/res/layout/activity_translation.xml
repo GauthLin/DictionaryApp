@@ -14,21 +14,18 @@
         tools:layout_editor_absoluteY="8dp">
 
         <TextView
+            android:textAlignment="center"
+            android:layout_marginTop="10sp"
             android:id="@+id/Word"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_height="wrap_content" android:textSize="26sp" />
 
         <TextView
+            android:layout_marginLeft="10sp"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="10sp"
             android:id="@+id/TransEng"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/TransEs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

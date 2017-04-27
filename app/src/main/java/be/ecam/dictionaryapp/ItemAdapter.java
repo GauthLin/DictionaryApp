@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import be.ecam.dictionaryapp.Entity.Translation;
 import be.ecam.dictionaryapp.Entity.Word;
@@ -73,21 +74,21 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterVie
         boolean shouldAttachToPArentImmediately = false;
         View view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToPArentImmediately);
         return new ItemAdapterViewHolder(view);
-
     }
 
     @Override
     public void onBindViewHolder(ItemAdapterViewHolder itemAdapterViewHolder, int position) {
-
-        //if(!cursor.moveToPosition(position)) return;
-
         myTranslationObject = vocabList.get(position);
         String textOrigin = myTranslationObject.getName();
         String textTrad = "";
 
         for (Translation translation :
                 myTranslationObject.getTranslations()) {
-            textTrad += translation.getTranslation();
+            // Add dash between two translations
+            if (!textTrad.isEmpty()) {
+                textTrad += " - ";
+            }
+            textTrad += String.format("%s (%s)", translation.getTranslation(), translation.getLanguage());
         }
 
         itemAdapterViewHolder.trans_origin_TextView.setText(textOrigin);
