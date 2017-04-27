@@ -1,7 +1,11 @@
 package be.ecam.dictionaryapp.Entity;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Defines a word to translate
@@ -35,6 +39,18 @@ public class Word {
 
     public List<Translation> getTranslations() {
         return translations;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public Translation getTranslation(String lang) {
+        for (Translation translation :
+                getTranslations()) {
+            if (Objects.equals(translation.getLanguage(), lang)) {
+                return translation;
+            }
+        }
+
+        return null;
     }
 
     public void addTranslation(Translation translation) {

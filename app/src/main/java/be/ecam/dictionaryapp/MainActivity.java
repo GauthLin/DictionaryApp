@@ -42,6 +42,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         //Preferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
+        // Manage button Quiz
+        Button quizBtn = (Button) findViewById(R.id.quizBtn);
+        quizBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, QuizActivity.class));
+            }
+        });
     }
 
     public static List<Word> getVocabulary() {

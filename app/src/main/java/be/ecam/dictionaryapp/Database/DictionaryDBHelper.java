@@ -5,9 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import be.ecam.dictionaryapp.Entity.Translation;
 import be.ecam.dictionaryapp.Entity.Word;
@@ -145,6 +148,29 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
         }
 
         wCursor.close();
+
+        return words;
+    }
+
+    /**
+     * Gets the list of the words that have a specific translation language
+     *
+     * @return list of words
+     */
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public List<Word> getWords(String lang) {
+        List<Word> words = new ArrayList<>();
+
+        for (Word word :
+                getWords()) {
+            for (Translation translation :
+                    word.getTranslations()) {
+                if (Objects.equals(translation.getLanguage(), lang)) {
+                    words.add(word);
+                    break;
+                }
+            }
+        }
 
         return words;
     }

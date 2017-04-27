@@ -37,4 +37,13 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="13dp"
         android:layout_marginEnd="13dp" />
+
+    <Button
+        android:id="@+id/quizBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/quiz"
+        android:layout_below="@+id/translationsRecyclerView"
+        android:layout_alignRight="@+id/textView2"
+        android:layout_alignEnd="@+id/textView2" />
 </RelativeLayout>
