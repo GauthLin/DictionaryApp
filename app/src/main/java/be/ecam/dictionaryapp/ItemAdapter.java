@@ -1,8 +1,6 @@
 package be.ecam.dictionaryapp;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,14 +12,12 @@ import java.util.List;
 
 import be.ecam.dictionaryapp.Entity.Translation;
 import be.ecam.dictionaryapp.Entity.Word;
-import be.ecam.dictionaryapp.MainActivity;
-import be.ecam.dictionaryapp.R;
 
 /**
  * Created by damien on 21.02.17.
  */
 
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterViewHolder>{
+public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterViewHolder> {
     //aura deux classes, une pour creer et une autre pour peupler (et recycler du coup)
 
     private Cursor cursor;
@@ -31,18 +27,22 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterVie
     private ItemAdapterOnClickHandler clickHandler;
 
     //constructeur de ItemAdapter
-    public ItemAdapter(ItemAdapterOnClickHandler clickHandler) { this.clickHandler = clickHandler; }
+    public ItemAdapter(ItemAdapterOnClickHandler clickHandler) {
+        this.clickHandler = clickHandler;
+    }
 
-    public interface ItemAdapterOnClickHandler { void onClick(int index); }
+    public interface ItemAdapterOnClickHandler {
+        void onClick(int index);
+    }
 
-    public class ItemAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ItemAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // on va creer une viewHolder, un bloc contenant une vue.
         // mission = garder les references vers les vues qui doivent etre mises à jour.
 
         public final TextView trans_origin_TextView;
         public final TextView trans_translation_TextView;
 
-        public ItemAdapterViewHolder (View view){
+        public ItemAdapterViewHolder(View view) {
             super(view);
             trans_origin_TextView = (TextView) view.findViewById(R.id.trans_origin);
             trans_translation_TextView = (TextView) view.findViewById(R.id.trans_translation);
@@ -64,8 +64,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterVie
     }
 
     @Override
-    public ItemAdapterViewHolder onCreateViewHolder (ViewGroup viewGroup, int viewType){
-            // nouvelle méthode de itemAdapter, celle qui va CREER les viewHolders.
+    public ItemAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        // nouvelle méthode de itemAdapter, celle qui va CREER les viewHolders.
 
         Context context = viewGroup.getContext();
         int layoutIdForListItem = R.layout.traduction_layout; // il a besoin de creer une des vues sur base du xml prédiction
@@ -77,7 +77,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterVie
     }
 
     @Override
-    public void onBindViewHolder(ItemAdapterViewHolder itemAdapterViewHolder, int position){
+    public void onBindViewHolder(ItemAdapterViewHolder itemAdapterViewHolder, int position) {
 
         //if(!cursor.moveToPosition(position)) return;
 
@@ -87,7 +87,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterVie
 
         for (Translation translation :
                 myTranslationObject.getTranslations()) {
-                textTrad += translation.getTranslation();
+            textTrad += translation.getTranslation();
         }
 
         itemAdapterViewHolder.trans_origin_TextView.setText(textOrigin);
@@ -99,7 +99,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterVie
         // move to position etc..
     }
 
-    public void setData(Cursor cursor){
+    public void setData(Cursor cursor) {
         this.cursor = cursor;
         notifyDataSetChanged();
         // le notify force le rafraichissement de l'affichage.
@@ -109,7 +109,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemAdapterVie
     // dans la main activity, une fonction loadData/Database qui fait la query, et qui avec le curseur recu utilisera.
 
     @Override
-    public int getItemCount(){
+    public int getItemCount() {
         return vocabList.size();
         // return 20;
     }

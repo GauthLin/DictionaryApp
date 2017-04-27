@@ -3,7 +3,8 @@ package be.ecam.dictionaryapp.Database;
 import android.provider.BaseColumns;
 
 public class TranslationContract {
-    private TranslationContract() {}
+    private TranslationContract() {
+    }
 
     /* Inner class that defines the table contents */
     public static class TranslationEntry implements BaseColumns {

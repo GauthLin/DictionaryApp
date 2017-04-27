@@ -13,7 +13,7 @@ public class Translation {
         this(0, translation, language);
     }
 
-    public Translation(int id, String translation, String language){
+    public Translation(int id, String translation, String language) {
         this.id = id;
         this.translation = translation;
         this.language = language;
@@ -40,9 +40,9 @@ public class Translation {
     }
 
     @Override
-    public boolean equals(Object o){
-        if (o instanceof Translation){
-            Translation translation = (Translation)o;
+    public boolean equals(Object o) {
+        if (o instanceof Translation) {
+            Translation translation = (Translation) o;
             if (this.getTranslation().toLowerCase() == translation.getTranslation().toLowerCase())
                 return true;
         }

@@ -1,4 +1,4 @@
-package be.ecam.dictionaryapp.Database;
+package be.ecam.dictionaryapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,12 +19,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import be.ecam.dictionaryapp.Database.DictionaryDBHelper;
 import be.ecam.dictionaryapp.Entity.Translation;
 import be.ecam.dictionaryapp.Entity.Word;
-import be.ecam.dictionaryapp.ItemAdapter;
-import be.ecam.dictionaryapp.MainActivity;
-import be.ecam.dictionaryapp.R;
-import be.ecam.dictionaryapp.translation;
 
 public class NewWordActivity extends AppCompatActivity {
     private EditText inputTxt;
@@ -45,78 +42,78 @@ public class NewWordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-                dbManager = new DictionaryDBHelper(this);
-                setContentView(R.layout.activity_new_word);
+        dbManager = new DictionaryDBHelper(this);
+        setContentView(R.layout.activity_new_word);
 
         /*
          * Instanciation de l'input et des 2 boutons de la page add new word.
          * Si on clique sur le btn2, récupère la traduction depuis serveur.
          * Si on clique sur le btn3, stock la traduction dans la DB.
          */
-                inputTxt = (EditText) findViewById(R.id.editText);
-                showTranslation = (TextView) findViewById((R.id.textView));
+        inputTxt = (EditText) findViewById(R.id.editText);
+        showTranslation = (TextView) findViewById((R.id.textView));
 
-                Button btn2 = (Button)findViewById(R.id.button2);
-                Button btn3 = (Button)findViewById(R.id.button3);
+        Button btn2 = (Button) findViewById(R.id.button2);
+        Button btn3 = (Button) findViewById(R.id.button3);
 
-        if(savedInstanceState!=null){
-            if(savedInstanceState.containsKey("translatedText")) {
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey("translatedText")) {
                 String textToRestore = savedInstanceState.getString("translatedText");
                 textToShow = textToRestore;
                 showTranslation.setText(textToShow);
             }
         }
 
-                btn2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        str = inputTxt.getText().toString();
-                        if (!isConnected()) {
-                            Toast.makeText(NewWordActivity.this, R.string.plz_connect_to_internet, Toast.LENGTH_LONG).show();
-                        } else if (!str.equals("")) {
-                            new AsyncNetworkingTask().execute();
-                        } else {
-                            Toast.makeText(NewWordActivity.this, R.string.plz_add_word, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                str = inputTxt.getText().toString();
+                if (!isConnected()) {
+                    Toast.makeText(NewWordActivity.this, R.string.plz_connect_to_internet, Toast.LENGTH_LONG).show();
+                } else if (!str.equals("")) {
+                    new AsyncNetworkingTask().execute();
+                } else {
+                    Toast.makeText(NewWordActivity.this, R.string.plz_add_word, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
-                btn3.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        str = inputTxt.getText().toString();
-                        if (textCanBeSaved) {
-                            Word word = dbManager.getWord(str);
-                            if (word == null){
-                                word = new Word(str);
-                            }
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                str = inputTxt.getText().toString();
+                if (textCanBeSaved) {
+                    Word word = dbManager.getWord(str);
+                    if (word == null) {
+                        word = new Word(str);
+                    }
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NewWordActivity.this);
                     String lang = prefs.getString("LangChoice", "en");
-                          
-                            Translation translation = new Translation(textToShow,lang);
-                            if (!word.getTranslations().contains(translation)) {
-                                word.addTranslation(translation);
-                                Toast.makeText(NewWordActivity.this, R.string.word_saved, Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(NewWordActivity.this, R.string.word_already_saved, Toast.LENGTH_LONG).show();
-                            }
 
-                            dbManager.save(word);
-                        } else {
-                            Toast.makeText(NewWordActivity.this, R.string.word_to_save_cannot_be_empty, Toast.LENGTH_LONG).show();
-                        }
+                    Translation translation = new Translation(textToShow, lang);
+                    if (!word.getTranslations().contains(translation)) {
+                        word.addTranslation(translation);
+                        Toast.makeText(NewWordActivity.this, R.string.word_saved, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(NewWordActivity.this, R.string.word_already_saved, Toast.LENGTH_LONG).show();
                     }
-                });
+
+                    dbManager.save(word);
+                } else {
+                    Toast.makeText(NewWordActivity.this, R.string.word_to_save_cannot_be_empty, Toast.LENGTH_LONG).show();
+                }
             }
+        });
+    }
 
     @Override
-    protected void  onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         String textToSave = textToShow;
         outState.putString("translatedText", textToSave);
     }
 
-    public class AsyncNetworkingTask extends AsyncTask< JSONObject , Void , JSONObject > {
+    public class AsyncNetworkingTask extends AsyncTask<JSONObject, Void, JSONObject> {
         @Override
         protected JSONObject doInBackground(JSONObject... params) {
             myTranslation = new JSONObject();
@@ -125,8 +122,7 @@ public class NewWordActivity extends AppCompatActivity {
 
             try {
                 myTranslation = translation.get("fr", lang, str);
-            }
-            catch (IOException | JSONException error){
+            } catch (IOException | JSONException error) {
                 Toast.makeText(NewWordActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
             }
 
@@ -144,8 +140,7 @@ public class NewWordActivity extends AppCompatActivity {
                     textToShow = myTranslation.getString("translationText");
                     textCanBeSaved = true;
                     showTranslation.setText(textToShow);
-                }
-                catch (JSONException error){
+                } catch (JSONException error) {
                     Toast.makeText(context, R.string.error, Toast.LENGTH_LONG).show();
                 }
             }

@@ -21,7 +21,7 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
             WordContract.WordEntry._ID,
             WordContract.WordEntry.COLUMN_NAME_NAME);
 
-    private static final String SQL_DELETE_WORD_ENTRIES = "DROP TABLE IF EXISTS "+ WordContract.WordEntry.TABLE_NAME;
+    private static final String SQL_DELETE_WORD_ENTRIES = "DROP TABLE IF EXISTS " + WordContract.WordEntry.TABLE_NAME;
 
     private static final String SQL_CREATE_TRANS_ENTRIES = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR(255), %s VARCHAR(2), %s INTEGER, FOREIGN KEY(%s) REFERENCES word(%s))",
             TranslationContract.TranslationEntry.TABLE_NAME,
@@ -32,7 +32,7 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
             TranslationContract.TranslationEntry.COLUMN_NAME_WORD_ID,
             WordContract.WordEntry._ID);
 
-    private static final String SQL_DELETE_TRANS_ENTRIES = "DROP TABLE IF EXISTS "+ TranslationContract.TranslationEntry.TABLE_NAME;
+    private static final String SQL_DELETE_TRANS_ENTRIES = "DROP TABLE IF EXISTS " + TranslationContract.TranslationEntry.TABLE_NAME;
 
 
     public DictionaryDBHelper(Context context) {
@@ -70,11 +70,11 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
 
             // Insert the new row, returning the primary key value of the new row
             long newRowId = db.insert(WordContract.WordEntry.TABLE_NAME, null, values);
-            Word new_word = new Word((int)newRowId, word.getName());
+            Word new_word = new Word((int) newRowId, word.getName());
 
             for (Translation translation :
                     word.getTranslations()) {
-                new_word.addTranslation(save(translation, (int)newRowId));
+                new_word.addTranslation(save(translation, (int) newRowId));
             }
 
             return new_word;
@@ -89,7 +89,7 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
 
             // Which row to update, based on the title
             String selection = WordContract.WordEntry._ID + " = ?";
-            String[] selectionArgs = { Integer.toString(word.getId()) };
+            String[] selectionArgs = {Integer.toString(word.getId())};
 
             int count = db.update(
                     WordContract.WordEntry.TABLE_NAME,
@@ -117,7 +117,7 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
         // Define 'where' part of query.
         String selection = WordContract.WordEntry._ID + " = ?";
         // Specify arguments in placeholder order.
-        String[] selectionArgs = { Integer.toString(word.getId()) };
+        String[] selectionArgs = {Integer.toString(word.getId())};
         // Issue SQL statement.
         db.delete(WordContract.WordEntry.TABLE_NAME, selection, selectionArgs);
     }
@@ -187,8 +187,8 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
     private Word getTranslationsOf(Word word) {
         SQLiteDatabase db = this.getReadableDatabase();
         String trans_query = String.format("SELECT * FROM %s t WHERE t.%s=?", TranslationContract.TranslationEntry.TABLE_NAME, TranslationContract.TranslationEntry.COLUMN_NAME_WORD_ID);
-        Cursor tCursor = db.rawQuery(trans_query, new String[] { String.valueOf(word.getId()) });
-        while(tCursor.moveToNext()) {
+        Cursor tCursor = db.rawQuery(trans_query, new String[]{String.valueOf(word.getId())});
+        while (tCursor.moveToNext()) {
             int trans_id = tCursor.getInt(tCursor.getColumnIndex(TranslationContract.TranslationEntry._ID));
             String trans = tCursor.getString(tCursor.getColumnIndex(TranslationContract.TranslationEntry.COLUMN_NAME_TRANSLATION));
             String trans_lang = tCursor.getString(tCursor.getColumnIndex(TranslationContract.TranslationEntry.COLUMN_NAME_LANGUAGE));
@@ -204,12 +204,11 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
      * Saves to the database the translation
      *
      * @param translation the translation to save
-     * @param word_id the word related to the translation
+     * @param word_id     the word related to the translation
      * @return the translation with its id
      */
     public Translation save(Translation translation, int word_id) {
-        if (translation.getId() == 0)
-        {
+        if (translation.getId() == 0) {
             // Gets the data repository in write mode
             SQLiteDatabase db = this.getWritableDatabase();
 
@@ -222,10 +221,8 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
             // Insert the new row, returning the primary key value of the new row
             long newRowId = db.insert(TranslationContract.TranslationEntry.TABLE_NAME, null, values);
 
-            return new Translation((int)newRowId, translation.getTranslation(), translation.getLanguage());
-        }
-        else
-        {
+            return new Translation((int) newRowId, translation.getTranslation(), translation.getLanguage());
+        } else {
             SQLiteDatabase db = this.getReadableDatabase();
 
             // Create a new map of values, where column names are the keys
@@ -236,7 +233,7 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
 
             // Which row to update, based on the title
             String selection = TranslationContract.TranslationEntry._ID + " = ?";
-            String[] selectionArgs = { Integer.toString(translation.getId()) };
+            String[] selectionArgs = {Integer.toString(translation.getId())};
 
             int count = db.update(
                     TranslationContract.TranslationEntry.TABLE_NAME,
@@ -259,7 +256,7 @@ public class DictionaryDBHelper extends SQLiteOpenHelper {
         // Define 'where' part of query.
         String selection = TranslationContract.TranslationEntry._ID + " = ?";
         // Specify arguments in placeholder order.
-        String[] selectionArgs = { Integer.toString(translation.getId()) };
+        String[] selectionArgs = {Integer.toString(translation.getId())};
         // Issue SQL statement.
         db.delete(TranslationContract.TranslationEntry.TABLE_NAME, selection, selectionArgs);
     }
