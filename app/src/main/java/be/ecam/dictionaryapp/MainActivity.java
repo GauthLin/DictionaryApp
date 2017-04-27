@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView translationsView;
     private ItemAdapter itemAdapter;
     public static List<Word> vocabulary = new ArrayList<>();
+
+    private TextView mDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
