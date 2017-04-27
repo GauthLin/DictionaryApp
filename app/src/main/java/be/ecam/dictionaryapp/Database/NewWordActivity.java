@@ -21,6 +21,8 @@ import java.io.IOException;
 
 import be.ecam.dictionaryapp.Entity.Translation;
 import be.ecam.dictionaryapp.Entity.Word;
+import be.ecam.dictionaryapp.ItemAdapter;
+import be.ecam.dictionaryapp.MainActivity;
 import be.ecam.dictionaryapp.R;
 import be.ecam.dictionaryapp.translation;
 
@@ -88,8 +90,10 @@ public class NewWordActivity extends AppCompatActivity {
                             if (word == null){
                                 word = new Word(str);
                             }
-
-                            Translation translation = new Translation(textToShow, "en");
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(NewWordActivity.this);
+                    String lang = prefs.getString("LangChoice", "en");
+                          
+                            Translation translation = new Translation(textToShow,lang);
                             if (!word.getTranslations().contains(translation)) {
                                 word.addTranslation(translation);
                                 Toast.makeText(NewWordActivity.this, R.string.word_saved, Toast.LENGTH_LONG).show();

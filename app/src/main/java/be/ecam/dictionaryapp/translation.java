@@ -6,6 +6,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import be.ecam.dictionaryapp.Database.DictionaryDBHelper;
 
 //public pour etre accédée
 //static pour ne pas devoir faire new.
@@ -15,6 +18,10 @@ import java.io.IOException;
  */
 
 public final class translation{
+
+    private String origin = null;
+    private String trans = null;
+    private static ArrayList<translation> translationsCollection = new ArrayList<>(); // on crée une liste vide
 
     public static JSONObject get(String from, String to, String text) throws IOException, JSONException{
         JSONObject result;
@@ -34,3 +41,4 @@ public final class translation{
     }
 
 }
+
