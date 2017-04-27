@@ -15,4 +15,7 @@
     <string name="word_already_saved">Ce mot est déjà enregistré !</string>
     <string name="word_to_save_cannot_be_empty">Le mot à enregistrer ne peut pas être vide !</string>
     <string name="error">Il y a eu une erreur. Veuillez réessayer plus tard.</string>
+    <string name="delete_word">Supprimer le mot</string>
+    <string name="confirm_suppression">Confirmer la suppression</string>
+    <string name="word_deleted">Le mot a bien été supprimé !</string>
 </resources>

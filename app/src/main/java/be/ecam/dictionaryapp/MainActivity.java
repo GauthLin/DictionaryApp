@@ -96,6 +96,4 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         // on prend l'index, on le met dans l'intent.
         startActivity(translationIntent);
     }
-
-
 }

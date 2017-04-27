@@ -6,10 +6,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
 
+import be.ecam.dictionaryapp.Database.DictionaryDBHelper;
 import be.ecam.dictionaryapp.Entity.Translation;
 import be.ecam.dictionaryapp.Entity.Word;
 
@@ -46,10 +49,37 @@ public class TranslationActivity extends AppCompatActivity {
         EnLangTextView.setText(trans);
 
         // on passe le Int au find de Weather, qui va nous renvoyer le bon weather.
-
         WordTextView.setText("Traduction du mot " + myTranslationObject.getName());
 
+        // Deletion of the word if button clicked
+        final Button deleteWordBtn = (Button) findViewById(R.id.delete_word);
+        final boolean[] already_pressed = {false};
+        deleteWordBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Ask the user to confirm the suppression within delay
+                if (!already_pressed[0]) {
+                    already_pressed[0] = true;
+                    deleteWordBtn.setText(R.string.confirm_suppression);
 
+                    // The user must confirm within 2 secondes
+                    // If he didn't confirm, the button will be refreshed
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    already_pressed[0] = false;
+                                    deleteWordBtn.setText(R.string.delete_word);
+                                }
+                            },
+                            2000);
+                } else { // confirmation of the suppression
+                    DictionaryDBHelper dbHelper = new DictionaryDBHelper(TranslationActivity.this);
+                    dbHelper.delete(myTranslationObject);
+                    deleteWordBtn.setText(R.string.word_deleted);
+                    deleteWordBtn.setEnabled(false);
+                }
+            }
+        });
     }
 
     @Override

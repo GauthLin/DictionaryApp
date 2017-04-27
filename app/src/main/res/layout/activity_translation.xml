@@ -27,5 +27,16 @@
             android:id="@+id/TransEng"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="20sp"
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_red_light"
+            android:id="@+id/delete_word"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/delete_word"
+            android:layout_marginLeft="10sp" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
